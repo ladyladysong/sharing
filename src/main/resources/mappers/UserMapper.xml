@@ -17,23 +17,91 @@
     id, email, username, password, gender, tel, image, create_time
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from user_profile
     where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="isUserExist" parameterType="java.lang.String" resultType="com.sharing.pojo.User" >
+    select * from user_profile
+    where email = #{email,jdbcType=VARCHAR}
+  </select>
+
+  <!-- user login operation -->
+  <select id="isValidUser" resultType="com.sharing.pojo.User" >
+    select * from user_profile
+    where email = #{email,jdbcType=VARCHAR} and password = #{password,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from user_profile
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.sharing.pojo.User" >
-    insert into user_profile (id, email, username, 
-      password, gender, tel, 
+    insert into user_profile (id, email, username,
+      password, gender, tel,
       image, create_time)
-    values (#{id,jdbcType=INTEGER}, #{email,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, 
-      #{password,jdbcType=VARCHAR}, #{gender,jdbcType=TINYINT}, #{tel,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=INTEGER}, #{email,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR},
+      #{password,jdbcType=VARCHAR}, #{gender,jdbcType=TINYINT}, #{tel,jdbcType=VARCHAR},
       #{image,jdbcType=VARCHAR}, now())
   </insert>
+
+  <insert id="addUser" parameterType="com.sharing.pojo.User" useGeneratedKeys="true" keyProperty="id">
+    insert into user_profile
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="username != null" >
+        username,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="gender != null" >
+        gender,
+      </if>
+      <if test="tel != null" >
+        tel,
+      </if>
+      <if test="image != null" >
+        image,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null" >
+        #{gender,jdbcType=TINYINT},
+      </if>
+      <if test="tel != null" >
+        #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="image != null" >
+        #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        now(),
+      </if>
+    </trim>
+  </insert>
+
   <insert id="insertSelective" parameterType="com.sharing.pojo.User" >
     insert into user_profile
     <trim prefix="(" suffix=")" suffixOverrides="," >
