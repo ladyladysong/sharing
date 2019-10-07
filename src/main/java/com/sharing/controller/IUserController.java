@@ -44,7 +44,7 @@ public class IUserController {
 
     @RequestMapping("register.do")
     @ResponseBody
-    public ServerResponse<String> register(HttpSession session, String email, String password){
+    public ServerResponse register(HttpSession session, String email, String password){
         log.info("1");
         return iUserService.register(email,password);
     }
