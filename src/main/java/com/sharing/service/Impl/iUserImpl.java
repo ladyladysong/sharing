@@ -84,15 +84,15 @@ public class iUserImpl implements iUserService {
         return ServerResponse.createByErrorMessage("No such user");
     }
 
-    public ServerResponse modify_password(String id, String pwd_){
+    public ServerResponse update_password(String id, String pwd_){
         User user = userMapper.selectByPrimaryKey(Integer.parseInt(id));
         if (user!=null){
             user.setPassword(pwd_);
             int re =userMapper.updateByPrimaryKeySelective(user);
             if (re > 0){
-                return ServerResponse.createBySuccessMessage("successfully update");
+                return ServerResponse.createBySuccessMessage("successfully update password");
             }
-            return ServerResponse.createByErrorMessage("cannot update");
+            return ServerResponse.createByErrorMessage("cannot update password");
         }
         return ServerResponse.createByErrorMessage("No such user");
     }
