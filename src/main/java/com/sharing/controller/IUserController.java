@@ -65,6 +65,13 @@ public class IUserController {
 
     }
 
+    @RequestMapping("update_password.do")
+    @ResponseBody
+    public ServerResponse<String> update_password(HttpSession session, String password){
+        String id = session.getId();
+        return iUserService.update_password(id,password);
+    }
+
 
 
 //    public ServerResponse<String> resetPassword(HttpSession session, String email){
