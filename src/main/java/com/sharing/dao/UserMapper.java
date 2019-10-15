@@ -1,6 +1,7 @@
 package com.sharing.dao;
 
 import com.sharing.pojo.User;
+import org.apache.ibatis.annotations.Param;
 
 public interface UserMapper {
     int deleteByPrimaryKey(Integer id);
@@ -13,7 +14,7 @@ public interface UserMapper {
 
     User isUserExist(String email);
 
-    User isValidUser(String email, String password);
+    User isValidUser(@Param("email")String email, @Param("password")String password);
 
     User addUser(User user);
 

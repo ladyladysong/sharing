@@ -28,11 +28,11 @@
     where email = #{email,jdbcType=VARCHAR}
   </select>
 
-  <!-- user login operation -->
   <select id="isValidUser" resultType="com.sharing.pojo.User" >
     select * from user_profile
     where email = #{email,jdbcType=VARCHAR} and password = #{password,jdbcType=VARCHAR}
   </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from user_profile
     where id = #{id,jdbcType=INTEGER}
@@ -50,8 +50,8 @@
     <selectKey keyProperty="id" resultType="int" order="BEFORE">
       select if(max(id) is null, 1, max(id) + 2) as newId from user_profile
     </selectKey>
-    insert into user_profile (id,email,username,password) values(#{id,jdbcType=INTEGER}, #{email,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR},
-    #{password,jdbcType=VARCHAR});
+    insert into user_profile (id,email,username,password,create_time) values(#{id,jdbcType=INTEGER}, #{email,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR},
+    #{password,jdbcType=VARCHAR}, now());
   </insert>
 
   <insert id="insertSelective" parameterType="com.sharing.pojo.User" >

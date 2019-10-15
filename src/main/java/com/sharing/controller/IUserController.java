@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
+import javax.swing.text.html.StyleSheet;
 
 
 @Slf4j
@@ -26,10 +27,10 @@ public class IUserController {
         ServerResponse<User> response = iUserService.login(email,password);
         if (response.isSuccess()){
             //record session
+            log.info("successful");
             session.setAttribute("user",email);
         }else
             session.setAttribute("error msg:",response.getMsg());
-        //log.info("log :{}",1);
         return response;
     }
 
@@ -49,17 +50,22 @@ public class IUserController {
         return iUserService.register(email,password);
     }
 
+    @RequestMapping("get_user_info.do")
+    @ResponseBody
+    public ServerResponse<String> getUserInfo(HttpSession session){
+        String id = session.getId();
+        return iUserService.get_user_info(id);
+    }
+
+    @RequestMapping("update.do")
+    @ResponseBody
+    public ServerResponse<String> update_info(HttpSession session, User user){
+        String id = session.getId();
+        return iUserService.update_info(user,id);
+
+    }
 
 
-
-
-
-
-//    @RequestMapping("get_user_info.do")
-//    @ResponseBody
-//    public ServerResponse<String> getUserInfo(){
-//
-//    }
 
 
 //    public ServerResponse<String> resetPassword(HttpSession session, String email){
