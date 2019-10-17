@@ -1,5 +1,6 @@
 package com.sharing.pojo;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class User {
@@ -19,7 +20,9 @@ public class User {
 
     private Date createTime;
 
-    public User(Integer id, String email, String username, String password, Byte gender, String tel, String image, Date createTime) {
+    private BigDecimal rate;
+
+    public User(Integer id, String email, String username, String password, Byte gender, String tel, String image, Date createTime, BigDecimal rate) {
         this.id = id;
         this.email = email;
         this.username = username;
@@ -28,6 +31,7 @@ public class User {
         this.tel = tel;
         this.image = image;
         this.createTime = createTime;
+        this.rate = rate;
     }
 
     public User() {
@@ -96,5 +100,13 @@ public class User {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public BigDecimal getRate() {
+        return rate;
+    }
+
+    public void setRate(BigDecimal rate) {
+        this.rate = rate;
     }
 }

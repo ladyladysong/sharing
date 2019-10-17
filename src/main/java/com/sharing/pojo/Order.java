@@ -26,7 +26,9 @@ public class Order {
 
     private Integer userProfileId;
 
-    public Order(Integer id, String orderNo, Byte status, String description, Integer tag, Date createTime, Date acceptTime, Date returnTime, BigDecimal locationLatitute, BigDecimal locationLongitude, Integer userProfileId) {
+    private String assets;
+
+    public Order(Integer id, String orderNo, Byte status, String description, Integer tag, Date createTime, Date acceptTime, Date returnTime, BigDecimal locationLatitute, BigDecimal locationLongitude, Integer userProfileId, String assets) {
         this.id = id;
         this.orderNo = orderNo;
         this.status = status;
@@ -38,6 +40,7 @@ public class Order {
         this.locationLatitute = locationLatitute;
         this.locationLongitude = locationLongitude;
         this.userProfileId = userProfileId;
+        this.assets = assets;
     }
 
     public Order() {
@@ -130,5 +133,13 @@ public class Order {
 
     public void setUserProfileId(Integer userProfileId) {
         this.userProfileId = userProfileId;
+    }
+
+    public String getAssets() {
+        return assets;
+    }
+
+    public void setAssets(String assets) {
+        this.assets = assets == null ? null : assets.trim();
     }
 }

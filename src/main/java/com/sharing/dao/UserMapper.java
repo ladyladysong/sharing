@@ -1,6 +1,7 @@
 package com.sharing.dao;
 
 import com.sharing.pojo.User;
+import org.apache.ibatis.annotations.Param;
 
 public interface UserMapper {
     int deleteByPrimaryKey(Integer id);
@@ -14,4 +15,8 @@ public interface UserMapper {
     int updateByPrimaryKeySelective(User record);
 
     int updateByPrimaryKey(User record);
+
+    int checkEmail(String email);
+
+    User selectByEmail(@Param("email") String email, @Param("password") String password);
 }
