@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
+import javax.swing.text.html.StyleSheet;
+
 
 @Slf4j
 @Controller
@@ -29,4 +31,30 @@ public class IUserController {
         }
         return response;
     }
+
+    @RequestMapping("update.do")
+    @ResponseBody
+    public ServerResponse<String> update_info(HttpSession session, User user){
+        String id = session.getId();
+        return iUserService.update_info(user,id);
+
+    }
+
+    @RequestMapping("update_password.do")
+    @ResponseBody
+    public ServerResponse<String> update_password(HttpSession session, String password){
+        String id = session.getId();
+        return iUserService.update_password(id,password);
+    }
+
+
+
+//    public ServerResponse<String> resetPassword(HttpSession session, String email){
+//        ServerResponse<String> response;
+//        //user login -> direct reset
+//
+//        //user not login -> email link
+//        return response;
+//    }
+
 }

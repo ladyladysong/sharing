@@ -12,6 +12,12 @@ public interface UserMapper {
 
     User selectByPrimaryKey(Integer id);
 
+    User isUserExist(String email);
+
+    User isValidUser(@Param("email")String email, @Param("password")String password);
+
+    User addUser(User user);
+
     int updateByPrimaryKeySelective(User record);
 
     int updateByPrimaryKey(User record);
