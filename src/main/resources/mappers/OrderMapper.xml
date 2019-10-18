@@ -24,15 +24,15 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from order
+    from sharing.order
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from order
+    delete from sharing.order
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.sharing.pojo.Order">
-    insert into order (id, order_no, status, 
+    insert into sharing.order (id, order_no, status,
       description, tag, create_time, 
       accept_time, return_time, location_latitute, 
       location_longitude, User_Profile_id, assets
@@ -44,7 +44,7 @@
       )
   </insert>
   <insert id="insertSelective" parameterType="com.sharing.pojo.Order">
-    insert into order
+    insert into sharing.order
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
@@ -123,7 +123,7 @@
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.sharing.pojo.Order">
-    update order
+    update sharing.order
     <set>
       <if test="orderNo != null">
         order_no = #{orderNo,jdbcType=VARCHAR},
@@ -162,7 +162,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.sharing.pojo.Order">
-    update order
+    update sharing.order
     set order_no = #{orderNo,jdbcType=VARCHAR},
       status = #{status,jdbcType=TINYINT},
       description = #{description,jdbcType=VARCHAR},
