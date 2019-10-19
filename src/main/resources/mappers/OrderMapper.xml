@@ -4,8 +4,8 @@
   <resultMap id="BaseResultMap" type="com.sharing.pojo.Order">
     <constructor>
       <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="order_no" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="status" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="order_no" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="status" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="description" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="tag" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
@@ -24,27 +24,27 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from order
+    from sharing.order
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from order
+    delete from sharing.order
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.sharing.pojo.Order">
-    insert into order (id, order_no, status, 
+    insert into sharing.order (id, order_no, status,
       description, tag, create_time, 
       accept_time, return_time, location_latitute, 
       location_longitude, User_Profile_id, assets
       )
-    values (#{id,jdbcType=INTEGER}, #{orderNo,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, 
-      #{description,jdbcType=VARCHAR}, #{tag,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+    values (#{id,jdbcType=INTEGER}, #{orderNo,jdbcType=BIGINT}, #{status,jdbcType=INTEGER}, 
+      #{description,jdbcType=VARCHAR}, #{tag,jdbcType=INTEGER}, now(),
       #{acceptTime,jdbcType=TIMESTAMP}, #{returnTime,jdbcType=TIMESTAMP}, #{locationLatitute,jdbcType=DECIMAL}, 
       #{locationLongitude,jdbcType=DECIMAL}, #{userProfileId,jdbcType=INTEGER}, #{assets,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.sharing.pojo.Order">
-    insert into order
+    insert into sharing.order
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
@@ -88,10 +88,10 @@
         #{id,jdbcType=INTEGER},
       </if>
       <if test="orderNo != null">
-        #{orderNo,jdbcType=VARCHAR},
+        #{orderNo,jdbcType=BIGINT},
       </if>
       <if test="status != null">
-        #{status,jdbcType=TINYINT},
+        #{status,jdbcType=INTEGER},
       </if>
       <if test="description != null">
         #{description,jdbcType=VARCHAR},
@@ -100,7 +100,7 @@
         #{tag,jdbcType=INTEGER},
       </if>
       <if test="createTime != null">
-        #{createTime,jdbcType=TIMESTAMP},
+        now(),
       </if>
       <if test="acceptTime != null">
         #{acceptTime,jdbcType=TIMESTAMP},
@@ -123,13 +123,13 @@
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.sharing.pojo.Order">
-    update order
+    update sharing.order
     <set>
       <if test="orderNo != null">
-        order_no = #{orderNo,jdbcType=VARCHAR},
+        order_no = #{orderNo,jdbcType=BIGINT},
       </if>
       <if test="status != null">
-        status = #{status,jdbcType=TINYINT},
+        status = #{status,jdbcType=INTEGER},
       </if>
       <if test="description != null">
         description = #{description,jdbcType=VARCHAR},
@@ -162,9 +162,9 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.sharing.pojo.Order">
-    update order
-    set order_no = #{orderNo,jdbcType=VARCHAR},
-      status = #{status,jdbcType=TINYINT},
+    update sharing.order
+    set order_no = #{orderNo,jdbcType=BIGINT},
+      status = #{status,jdbcType=INTEGER},
       description = #{description,jdbcType=VARCHAR},
       tag = #{tag,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -176,6 +176,27 @@
       assets = #{assets,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectList" resultMap="BaseResultMap" parameterType="map">
+    select
+    <include refid="Base_Column_List"/>
+    from sharing.order
+    where location_latitute &gt;= #{latituteBot}
+    and location_latitute &lt;= #{latituteUp}
+    and location_longitude &gt;= #{longitudeBot}
+    and location_longitude &lt;= #{longitudeUp}
+    and tag in
+    <foreach collection="tags" item="tag" index="index" open="(" separator="," close=")">
+      #{tag}
+    </foreach>
+  </select>
+
+  <select id="selectByOrderNo" parameterType="long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from sharing.order
+    where order_no=#{orderNo}
+  </select>
 
 
 

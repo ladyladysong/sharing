@@ -19,7 +19,7 @@ public class iUserImpl implements iUserService {
             return ServerResponse.createByErrorMessage("user not exists");
         }
         String md5Passwd= MD5Util.MD5EncodeUtf8(passwd);
-        User user=userMapper.selectByEmail(email,md5Passwd);
+        User user=userMapper.selectByEmail(email,passwd);
         if(user==null){
             return ServerResponse.createByErrorMessage("wrong password");
         }

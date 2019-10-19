@@ -2,6 +2,7 @@ package com.sharing.common;
 
 import com.google.common.collect.Sets;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 public class Const {
@@ -15,12 +16,11 @@ public class Const {
     }
 
     public enum OrderStatusEnum{
-        CANCELED(0,"已取消"),
-        NO_PAY(10,"未支付"),
-        PAID(20,"已付款"),
-        SHIPPED(40,"已发货"),
-        ORDER_SUCCESS(50,"订单完成"),
-        ORDER_CLOSE(60,"订单关闭");
+        PUBLISHED(0,"published"),
+        ACCEPTED(10,"accepted"),
+        PAST(20,"past"),
+        ORDER_SUCCESS(30,"finish"),
+        CANCELED(40,"cancel");
 
 
         OrderStatusEnum(int code,String value){
@@ -44,16 +44,58 @@ public class Const {
                     return orderStatusEnum;
                 }
             }
-            throw new RuntimeException("么有找到对应的枚举");
+            throw new RuntimeException("no corresponding enum");
+        }
+    }
+
+    public enum tag{
+        STUDY(0,"study"),
+        OFFICE(10,"office"),
+        SPORT(20,"sport"),
+        ELECTRONIC(30,"electronic"),
+        HOME(40,"home");
+
+
+        tag(int code,String value){
+            this.code = code;
+            this.value = value;
+        }
+        private String value;
+        private int code;
+
+        public String getValue() {
+            return value;
+        }
+
+        public int getCode() {
+            return code;
+        }
+
+        public static tag codeOf(int code){
+            for(tag t : values()){
+                if(t.getCode() == code){
+                    return t;
+                }
+            }
+            throw new RuntimeException("no corresponding enum");
         }
     }
 
     public interface RedisCacheExtime{
-        int REDIS_SESSION_EXTIME = 60 * 30;//30分钟
+        int REDIS_SESSION_EXTIME = 60 * 30;
     }
 
     public interface REDIS_LOCK{
         String CLOSE_ORDER_TASK_LOCK="CLOSE_ORDER_TASK_LOCK";
+    }
+
+    public interface PositionRange{
+        BigDecimal RANGE=new BigDecimal("0.001");
+    }
+
+    public interface PageSettings{
+        int PAGE_NUMBER=1;
+        int PAGE_SIZE=10;
     }
 
 }

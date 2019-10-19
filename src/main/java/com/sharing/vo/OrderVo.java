@@ -1,11 +1,10 @@
-package com.sharing.pojo;
+package com.sharing.vo;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
-public class Order {
-    private Integer id;
-
+public class OrderVo {
     private Long orderNo;
 
     private Integer status;
@@ -26,34 +25,7 @@ public class Order {
 
     private Integer userProfileId;
 
-    private String assets;
-
-    public Order(Integer id, Long orderNo, Integer status, String description, Integer tag, Date createTime, Date acceptTime, Date returnTime, BigDecimal locationLatitute, BigDecimal locationLongitude, Integer userProfileId, String assets) {
-        this.id = id;
-        this.orderNo = orderNo;
-        this.status = status;
-        this.description = description;
-        this.tag = tag;
-        this.createTime = createTime;
-        this.acceptTime = acceptTime;
-        this.returnTime = returnTime;
-        this.locationLatitute = locationLatitute;
-        this.locationLongitude = locationLongitude;
-        this.userProfileId = userProfileId;
-        this.assets = assets;
-    }
-
-    public Order() {
-        super();
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    private List<String> assets;
 
     public Long getOrderNo() {
         return orderNo;
@@ -76,7 +48,7 @@ public class Order {
     }
 
     public void setDescription(String description) {
-        this.description = description == null ? null : description.trim();
+        this.description = description;
     }
 
     public Integer getTag() {
@@ -135,11 +107,11 @@ public class Order {
         this.userProfileId = userProfileId;
     }
 
-    public String getAssets() {
+    public List<String> getAssets() {
         return assets;
     }
 
-    public void setAssets(String assets) {
-        this.assets = assets == null ? null : assets.trim();
+    public void setAssets(List<String> assets) {
+        this.assets = assets;
     }
 }

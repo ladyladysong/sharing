@@ -7,15 +7,18 @@
       <arg column="email" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="username" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="password" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="gender" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="gender" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="tel" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="image" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="rate" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="location_latitute" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="location_longitude" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
     </constructor>
   </resultMap>
   <sql id="Base_Column_List">
-    id, email, username, password, gender, tel, image, create_time, rate
+    id, email, username, password, gender, tel, image, rate, create_time, location_latitute, 
+    location_longitude
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -30,12 +33,12 @@
   <insert id="insert" parameterType="com.sharing.pojo.User">
     insert into user_profile (id, email, username, 
       password, gender, tel, 
-      image, create_time, rate
-      )
+      image, rate, create_time, 
+      location_latitute, location_longitude)
     values (#{id,jdbcType=INTEGER}, #{email,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, 
-      #{password,jdbcType=VARCHAR}, #{gender,jdbcType=TINYINT}, #{tel,jdbcType=VARCHAR}, 
-      #{image,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{rate,jdbcType=DECIMAL}
-      )
+      #{password,jdbcType=VARCHAR}, #{gender,jdbcType=INTEGER}, #{tel,jdbcType=VARCHAR}, 
+      #{image,jdbcType=VARCHAR}, #{rate,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{locationLatitute,jdbcType=DECIMAL}, #{locationLongitude,jdbcType=DECIMAL})
   </insert>
   <insert id="insertSelective" parameterType="com.sharing.pojo.User">
     insert into user_profile
@@ -61,11 +64,17 @@
       <if test="image != null">
         image,
       </if>
+      <if test="rate != null">
+        rate,
+      </if>
       <if test="createTime != null">
         create_time,
       </if>
-      <if test="rate != null">
-        rate,
+      <if test="locationLatitute != null">
+        location_latitute,
+      </if>
+      <if test="locationLongitude != null">
+        location_longitude,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -82,7 +91,7 @@
         #{password,jdbcType=VARCHAR},
       </if>
       <if test="gender != null">
-        #{gender,jdbcType=TINYINT},
+        #{gender,jdbcType=INTEGER},
       </if>
       <if test="tel != null">
         #{tel,jdbcType=VARCHAR},
@@ -90,11 +99,17 @@
       <if test="image != null">
         #{image,jdbcType=VARCHAR},
       </if>
+      <if test="rate != null">
+        #{rate,jdbcType=DECIMAL},
+      </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="rate != null">
-        #{rate,jdbcType=DECIMAL},
+      <if test="locationLatitute != null">
+        #{locationLatitute,jdbcType=DECIMAL},
+      </if>
+      <if test="locationLongitude != null">
+        #{locationLongitude,jdbcType=DECIMAL},
       </if>
     </trim>
   </insert>
@@ -111,7 +126,7 @@
         password = #{password,jdbcType=VARCHAR},
       </if>
       <if test="gender != null">
-        gender = #{gender,jdbcType=TINYINT},
+        gender = #{gender,jdbcType=INTEGER},
       </if>
       <if test="tel != null">
         tel = #{tel,jdbcType=VARCHAR},
@@ -119,11 +134,17 @@
       <if test="image != null">
         image = #{image,jdbcType=VARCHAR},
       </if>
+      <if test="rate != null">
+        rate = #{rate,jdbcType=DECIMAL},
+      </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="rate != null">
-        rate = #{rate,jdbcType=DECIMAL},
+      <if test="locationLatitute != null">
+        location_latitute = #{locationLatitute,jdbcType=DECIMAL},
+      </if>
+      <if test="locationLongitude != null">
+        location_longitude = #{locationLongitude,jdbcType=DECIMAL},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -133,16 +154,27 @@
     set email = #{email,jdbcType=VARCHAR},
       username = #{username,jdbcType=VARCHAR},
       password = #{password,jdbcType=VARCHAR},
-      gender = #{gender,jdbcType=TINYINT},
+      gender = #{gender,jdbcType=INTEGER},
       tel = #{tel,jdbcType=VARCHAR},
       image = #{image,jdbcType=VARCHAR},
+      rate = #{rate,jdbcType=DECIMAL},
       create_time = #{createTime,jdbcType=TIMESTAMP},
-      rate = #{rate,jdbcType=DECIMAL}
+      location_latitute = #{locationLatitute,jdbcType=DECIMAL},
+      location_longitude = #{locationLongitude,jdbcType=DECIMAL}
     where id = #{id,jdbcType=INTEGER}
   </update>
 
 
 
+  <select id="selectList" parameterType="map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from user_profile
+    where location_latitute &gt;= #{latituteBot}
+    and location_latitute &lt;= #{latituteUp}
+    and location_longitude &gt;= #{longitudeBot}
+    and location_longitude &lt;= #{longitudeUp}
+  </select>
 
   <select id="checkEmail" parameterType="string" resultType="int">
     select count(1)
