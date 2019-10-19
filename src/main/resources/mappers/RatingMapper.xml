@@ -83,6 +83,8 @@
   </update>
 
 
+
+
   <select id="checkByUidAndOid" parameterType="map" resultType="int">
     select count(1)
     from rating

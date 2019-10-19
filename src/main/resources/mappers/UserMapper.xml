@@ -1,3 +1,23 @@
+<<<<<<< HEAD
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sharing.dao.UserMapper" >
+  <resultMap id="BaseResultMap" type="com.sharing.pojo.User" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="email" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="username" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="password" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="gender" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="tel" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="image" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+       <arg column="rate" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, email, username, password, gender, tel, image, create_time, rate
+=======
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sharing.dao.UserMapper">
@@ -7,144 +27,214 @@
       <arg column="email" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="username" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="password" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="gender" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="gender" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="tel" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="image" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="rate" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="location_latitute" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="location_longitude" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
     </constructor>
   </resultMap>
   <sql id="Base_Column_List">
-    id, email, username, password, gender, tel, image, create_time, rate
+    id, email, username, password, gender, tel, image, rate, create_time, location_latitute, 
+    location_longitude
+>>>>>>> c19051653ccd879c6cdda72245611bf3d10c17f6
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
     <include refid="Base_Column_List" />
     from user_profile
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+
+  <select id="isUserExist" parameterType="java.lang.String" resultType="com.sharing.pojo.User" >
+    select * from user_profile
+    where email = #{email,jdbcType=VARCHAR}
+  </select>
+
+  <select id="isValidUser" resultType="com.sharing.pojo.User" >
+    select * from user_profile
+    where email = #{email,jdbcType=VARCHAR} and password = #{password,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from user_profile
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.sharing.pojo.User">
     insert into user_profile (id, email, username, 
       password, gender, tel, 
-      image, create_time, rate
-      )
+      image, rate, create_time, 
+      location_latitute, location_longitude)
     values (#{id,jdbcType=INTEGER}, #{email,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, 
-      #{password,jdbcType=VARCHAR}, #{gender,jdbcType=TINYINT}, #{tel,jdbcType=VARCHAR}, 
-      #{image,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{rate,jdbcType=DECIMAL}
-      )
+      #{password,jdbcType=VARCHAR}, #{gender,jdbcType=INTEGER}, #{tel,jdbcType=VARCHAR}, 
+      #{image,jdbcType=VARCHAR}, #{rate,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{locationLatitute,jdbcType=DECIMAL}, #{locationLongitude,jdbcType=DECIMAL})
   </insert>
-  <insert id="insertSelective" parameterType="com.sharing.pojo.User">
+  <insert id="addUser" parameterType="com.sharing.pojo.User" useGeneratedKeys="true" keyProperty="id">
+    <selectKey keyProperty="id" resultType="int" order="BEFORE">
+      select if(max(id) is null, 1, max(id) + 2) as newId from user_profile
+    </selectKey>
+    insert into user_profile (id,email,username,password,create_time) values(#{id,jdbcType=INTEGER}, #{email,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR},
+    #{password,jdbcType=VARCHAR}, now());
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.sharing.pojo.User" >
     insert into user_profile
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
         id,
       </if>
-      <if test="email != null">
+      <if test="email != null" >
         email,
       </if>
-      <if test="username != null">
+      <if test="username != null" >
         username,
       </if>
-      <if test="password != null">
+      <if test="password != null" >
         password,
       </if>
-      <if test="gender != null">
+      <if test="gender != null" >
         gender,
       </if>
-      <if test="tel != null">
+      <if test="tel != null" >
         tel,
       </if>
-      <if test="image != null">
+      <if test="image != null" >
         image,
-      </if>
-      <if test="createTime != null">
-        create_time,
       </if>
       <if test="rate != null">
         rate,
       </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="locationLatitute != null">
+        location_latitute,
+      </if>
+      <if test="locationLongitude != null">
+        location_longitude,
+      </if>
     </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="email != null">
+      <if test="email != null" >
         #{email,jdbcType=VARCHAR},
       </if>
-      <if test="username != null">
+      <if test="username != null" >
         #{username,jdbcType=VARCHAR},
       </if>
-      <if test="password != null">
+      <if test="password != null" >
         #{password,jdbcType=VARCHAR},
       </if>
-      <if test="gender != null">
+<<<<<<< HEAD
+      <if test="gender != null" >
         #{gender,jdbcType=TINYINT},
+=======
+      <if test="gender != null">
+        #{gender,jdbcType=INTEGER},
+>>>>>>> c19051653ccd879c6cdda72245611bf3d10c17f6
       </if>
-      <if test="tel != null">
+      <if test="tel != null" >
         #{tel,jdbcType=VARCHAR},
       </if>
-      <if test="image != null">
+      <if test="image != null" >
         #{image,jdbcType=VARCHAR},
-      </if>
-      <if test="createTime != null">
-        #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="rate != null">
         #{rate,jdbcType=DECIMAL},
       </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="locationLatitute != null">
+        #{locationLatitute,jdbcType=DECIMAL},
+      </if>
+      <if test="locationLongitude != null">
+        #{locationLongitude,jdbcType=DECIMAL},
+      </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.sharing.pojo.User">
+  <update id="updateByPrimaryKeySelective" parameterType="com.sharing.pojo.User" >
     update user_profile
-    <set>
-      <if test="email != null">
+    <set >
+      <if test="email != null" >
         email = #{email,jdbcType=VARCHAR},
       </if>
-      <if test="username != null">
+      <if test="username != null" >
         username = #{username,jdbcType=VARCHAR},
       </if>
-      <if test="password != null">
+      <if test="password != null" >
         password = #{password,jdbcType=VARCHAR},
       </if>
-      <if test="gender != null">
+<<<<<<< HEAD
+      <if test="gender != null" >
         gender = #{gender,jdbcType=TINYINT},
+=======
+      <if test="gender != null">
+        gender = #{gender,jdbcType=INTEGER},
+>>>>>>> c19051653ccd879c6cdda72245611bf3d10c17f6
       </if>
-      <if test="tel != null">
+      <if test="tel != null" >
         tel = #{tel,jdbcType=VARCHAR},
       </if>
-      <if test="image != null">
+      <if test="image != null" >
         image = #{image,jdbcType=VARCHAR},
       </if>
-      <if test="createTime != null">
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
+<<<<<<< HEAD
+      <if test="createTime != null" >
+=======
       <if test="rate != null">
         rate = #{rate,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+>>>>>>> c19051653ccd879c6cdda72245611bf3d10c17f6
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="locationLatitute != null">
+        location_latitute = #{locationLatitute,jdbcType=DECIMAL},
+      </if>
+      <if test="locationLongitude != null">
+        location_longitude = #{locationLongitude,jdbcType=DECIMAL},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.sharing.pojo.User">
+  <update id="updateByPrimaryKey" parameterType="com.sharing.pojo.User" >
     update user_profile
     set email = #{email,jdbcType=VARCHAR},
       username = #{username,jdbcType=VARCHAR},
       password = #{password,jdbcType=VARCHAR},
-      gender = #{gender,jdbcType=TINYINT},
+      gender = #{gender,jdbcType=INTEGER},
       tel = #{tel,jdbcType=VARCHAR},
       image = #{image,jdbcType=VARCHAR},
+      rate = #{rate,jdbcType=DECIMAL},
       create_time = #{createTime,jdbcType=TIMESTAMP},
-      rate = #{rate,jdbcType=DECIMAL}
+      location_latitute = #{locationLatitute,jdbcType=DECIMAL},
+      location_longitude = #{locationLongitude,jdbcType=DECIMAL}
     where id = #{id,jdbcType=INTEGER}
   </update>
+<<<<<<< HEAD
+    <select id="checkEmail" parameterType="string" resultType="int">
+=======
 
 
 
+  <select id="selectList" parameterType="map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from user_profile
+    where location_latitute &gt;= #{latituteBot}
+    and location_latitute &lt;= #{latituteUp}
+    and location_longitude &gt;= #{longitudeBot}
+    and location_longitude &lt;= #{longitudeUp}
+  </select>
 
   <select id="checkEmail" parameterType="string" resultType="int">
+>>>>>>> c19051653ccd879c6cdda72245611bf3d10c17f6
     select count(1)
     from user_profile
     where email=#{email}

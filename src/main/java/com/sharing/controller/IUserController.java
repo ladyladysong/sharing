@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
 
+
 @Slf4j
 @Controller
 @RequestMapping("/user")
@@ -29,4 +30,57 @@ public class IUserController {
         }
         return response;
     }
+
+    @RequestMapping("logout.do")
+    @ResponseBody
+    public void logout(HttpSession session){
+        session.invalidate();
+
+    }
+
+    @RequestMapping("register.do")
+    @ResponseBody
+    public ServerResponse<User> register(HttpSession session, String email, String password){
+        log.info("1");
+        ServerResponse<User> response = iUserService.register(email,password);
+        return response;
+    }
+
+
+    @RequestMapping("get_user_info.do")
+    @ResponseBody
+    public ServerResponse<User> getUserInfo(HttpSession session){
+        String id = session.getId();
+
+        return iUserService.get_user_info(id);
+    }
+
+    @RequestMapping("update.do")
+    @ResponseBody
+    public ServerResponse<String> update_info(HttpSession session, User user){
+        String id = session.getId();
+        return iUserService.update_info(user,id);
+
+    }
+
+    @RequestMapping("update_password.do")
+    @ResponseBody
+    public ServerResponse<String> update_password(HttpSession session, String password){
+        String id = session.getId();
+        return iUserService.update_password(id,password);
+    }
+
+
+//   reset_password.do {email}
+//    update_location.do {lo;la}
+
+
+//    public ServerResponse<String> resetPassword(HttpSession session, String email){
+//        ServerResponse<String> response;
+//        //user login -> direct reset
+//
+//        //user not login -> email link
+//        return response;
+//    }
+
 }

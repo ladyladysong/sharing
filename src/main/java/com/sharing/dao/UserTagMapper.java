@@ -1,6 +1,9 @@
 package com.sharing.dao;
 
 import com.sharing.pojo.UserTag;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface UserTagMapper {
     int deleteByPrimaryKey(Integer id);
@@ -14,4 +17,8 @@ public interface UserTagMapper {
     int updateByPrimaryKeySelective(UserTag record);
 
     int updateByPrimaryKey(UserTag record);
+
+    List<Integer> selectByUserId(Integer uid);
+
+    int checkUserTag(@Param("uid") Integer uid, @Param("tag") Integer tag);
 }

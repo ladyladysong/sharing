@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
 @Slf4j
 @RequestMapping("/rating")
 @Controller
-public class iRateController {
+public class IRateController {
     @Autowired
     private iRatingService iRatingService;
 

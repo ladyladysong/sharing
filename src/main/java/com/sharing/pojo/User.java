@@ -12,17 +12,21 @@ public class User {
 
     private String password;
 
-    private Byte gender;
+    private Integer gender;
 
     private String tel;
 
     private String image;
 
-    private Date createTime;
-
     private BigDecimal rate;
 
-    public User(Integer id, String email, String username, String password, Byte gender, String tel, String image, Date createTime, BigDecimal rate) {
+    private Date createTime;
+
+    private BigDecimal locationLatitute;
+
+    private BigDecimal locationLongitude;
+
+    public User(Integer id, String email, String username, String password, Integer gender, String tel, String image, BigDecimal rate, Date createTime, BigDecimal locationLatitute, BigDecimal locationLongitude) {
         this.id = id;
         this.email = email;
         this.username = username;
@@ -30,8 +34,10 @@ public class User {
         this.gender = gender;
         this.tel = tel;
         this.image = image;
-        this.createTime = createTime;
         this.rate = rate;
+        this.createTime = createTime;
+        this.locationLatitute = locationLatitute;
+        this.locationLongitude = locationLongitude;
     }
 
     public User() {
@@ -70,11 +76,11 @@ public class User {
         this.password = password == null ? null : password.trim();
     }
 
-    public Byte getGender() {
+    public Integer getGender() {
         return gender;
     }
 
-    public void setGender(Byte gender) {
+    public void setGender(Integer gender) {
         this.gender = gender;
     }
 
@@ -94,6 +100,14 @@ public class User {
         this.image = image == null ? null : image.trim();
     }
 
+    public BigDecimal getRate() {
+        return rate;
+    }
+
+    public void setRate(BigDecimal rate) {
+        this.rate = rate;
+    }
+
     public Date getCreateTime() {
         return createTime;
     }
@@ -102,11 +116,19 @@ public class User {
         this.createTime = createTime;
     }
 
-    public BigDecimal getRate() {
-        return rate;
+    public BigDecimal getLocationLatitute() {
+        return locationLatitute;
     }
 
-    public void setRate(BigDecimal rate) {
-        this.rate = rate;
+    public void setLocationLatitute(BigDecimal locationLatitute) {
+        this.locationLatitute = locationLatitute;
+    }
+
+    public BigDecimal getLocationLongitude() {
+        return locationLongitude;
+    }
+
+    public void setLocationLongitude(BigDecimal locationLongitude) {
+        this.locationLongitude = locationLongitude;
     }
 }

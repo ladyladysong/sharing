@@ -71,5 +71,18 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
+  <select id="selectByUserId" parameterType="int" resultType="int">
+    select tag
+    from user_tag
+    where User_Profile_id=#{uid}
+  </select>
+
+  <select id="checkUserTag" parameterType="map" resultType="int">
+    select count(1)
+    from user_tag
+    where tag=#{tag} and User_Profile_id=#{uid}
+  </select>
+
+
 
 </mapper>
