@@ -1,23 +1,4 @@
-<<<<<<< HEAD
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.sharing.dao.UserMapper" >
-  <resultMap id="BaseResultMap" type="com.sharing.pojo.User" >
-    <constructor >
-      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="email" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="username" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="password" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="gender" jdbcType="TINYINT" javaType="java.lang.Byte" />
-      <arg column="tel" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="image" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
-       <arg column="rate" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
-    </constructor>
-  </resultMap>
-  <sql id="Base_Column_List" >
-    id, email, username, password, gender, tel, image, create_time, rate
-=======
+
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sharing.dao.UserMapper">
@@ -39,7 +20,6 @@
   <sql id="Base_Column_List">
     id, email, username, password, gender, tel, image, rate, create_time, location_latitute, 
     location_longitude
->>>>>>> c19051653ccd879c6cdda72245611bf3d10c17f6
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select
@@ -130,13 +110,8 @@
       <if test="password != null" >
         #{password,jdbcType=VARCHAR},
       </if>
-<<<<<<< HEAD
-      <if test="gender != null" >
-        #{gender,jdbcType=TINYINT},
-=======
       <if test="gender != null">
         #{gender,jdbcType=INTEGER},
->>>>>>> c19051653ccd879c6cdda72245611bf3d10c17f6
       </if>
       <if test="tel != null" >
         #{tel,jdbcType=VARCHAR},
@@ -170,13 +145,8 @@
       <if test="password != null" >
         password = #{password,jdbcType=VARCHAR},
       </if>
-<<<<<<< HEAD
-      <if test="gender != null" >
-        gender = #{gender,jdbcType=TINYINT},
-=======
       <if test="gender != null">
         gender = #{gender,jdbcType=INTEGER},
->>>>>>> c19051653ccd879c6cdda72245611bf3d10c17f6
       </if>
       <if test="tel != null" >
         tel = #{tel,jdbcType=VARCHAR},
@@ -184,15 +154,11 @@
       <if test="image != null" >
         image = #{image,jdbcType=VARCHAR},
       </if>
-<<<<<<< HEAD
       <if test="createTime != null" >
-=======
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="rate != null">
         rate = #{rate,jdbcType=DECIMAL},
-      </if>
-      <if test="createTime != null">
->>>>>>> c19051653ccd879c6cdda72245611bf3d10c17f6
-        create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="locationLatitute != null">
         location_latitute = #{locationLatitute,jdbcType=DECIMAL},
@@ -217,12 +183,6 @@
       location_longitude = #{locationLongitude,jdbcType=DECIMAL}
     where id = #{id,jdbcType=INTEGER}
   </update>
-<<<<<<< HEAD
-    <select id="checkEmail" parameterType="string" resultType="int">
-=======
-
-
-
   <select id="selectList" parameterType="map" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List"/>
@@ -234,7 +194,6 @@
   </select>
 
   <select id="checkEmail" parameterType="string" resultType="int">
->>>>>>> c19051653ccd879c6cdda72245611bf3d10c17f6
     select count(1)
     from user_profile
     where email=#{email}

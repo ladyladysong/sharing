@@ -163,13 +163,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.sharing.pojo.Order">
     update sharing.order
-<<<<<<< HEAD
-    set order_no = #{orderNo,jdbcType=VARCHAR},
-      status = #{status,jdbcType=TINYINT},
-=======
-    set order_no = #{orderNo,jdbcType=BIGINT},
+      set order_no = #{orderNo,jdbcType=BIGINT},
       status = #{status,jdbcType=INTEGER},
->>>>>>> c19051653ccd879c6cdda72245611bf3d10c17f6
       description = #{description,jdbcType=VARCHAR},
       tag = #{tag,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
