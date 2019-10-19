@@ -17,16 +17,16 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
         HttpSession session=httpServletRequest.getSession();
         User user=(User) session.getAttribute(Const.CURRENT_USER);
-        if (user==null){
-            httpServletResponse.reset();
-            httpServletResponse.setCharacterEncoding("UTF-8");
-            httpServletResponse.setContentType("application/json;charset=UTF-8");
-            PrintWriter writer=httpServletResponse.getWriter();
-            writer.print(JsonUtil.obj2String(ServerResponse.createByErrorMessage("Intercepted, no login")));
-            writer.flush();
-            writer.close();
-            return false;
-        }
+//        if (user==null){
+//            httpServletResponse.reset();
+//            httpServletResponse.setCharacterEncoding("UTF-8");
+//            httpServletResponse.setContentType("application/json;charset=UTF-8");
+//            PrintWriter writer=httpServletResponse.getWriter();
+//            writer.print(JsonUtil.obj2String(ServerResponse.createByErrorMessage("Intercepted, no login")));
+//            writer.flush();
+//            writer.close();
+//            return false;
+//        }
         return true;
     }
 

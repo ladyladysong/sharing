@@ -3,8 +3,8 @@ package com.sharing.dao;
 import com.sharing.pojo.Order;
 import com.sharing.pojo.User;
 import org.apache.ibatis.annotations.Param;
-
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 
 public interface UserMapper {
@@ -20,7 +20,9 @@ public interface UserMapper {
 
     User isValidUser(@Param("email")String email, @Param("password")String password);
 
-    User addUser(User user);
+    int addNewUser(User user);
+
+    int updateLoById(@Param("id") Integer id, @Param("latitute") BigDecimal latitute, @Param("longitude") BigDecimal longitude);
 
     int updateByPrimaryKeySelective(User record);
 

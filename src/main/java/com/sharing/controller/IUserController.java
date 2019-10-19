@@ -11,8 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
-import javax.swing.text.html.StyleSheet;
-
+import java.math.BigDecimal;
 
 
 @Slf4j
@@ -42,34 +41,38 @@ public class IUserController {
 
     @RequestMapping("register.do")
     @ResponseBody
-    public ServerResponse<User> register(HttpSession session, String email, String password){
-        log.info("1");
-        ServerResponse<User> response = iUserService.register(email,password);
-        return response;
+    public ServerResponse register(HttpSession session, String email, String password, BigDecimal latitute, BigDecimal longitude){
+        return iUserService.register(email,password,latitute,longitude);
     }
 
 
     @RequestMapping("get_user_info.do")
     @ResponseBody
     public ServerResponse<User> getUserInfo(HttpSession session){
-        String id = session.getId();
-
-        return iUserService.get_user_info(id);
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        return iUserService.get_user_info(user.getId());
     }
 
     @RequestMapping("update.do")
     @ResponseBody
-    public ServerResponse<String> update_info(HttpSession session, User user){
-        String id = session.getId();
-        return iUserService.update_info(user,id);
+    public ServerResponse<String> update_info(HttpSession session,String info){
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        return iUserService.update_info(user.getId(),info);
 
     }
+//
+//    @RequestMapping("update_password.do")
+//    @ResponseBody
+//    public ServerResponse<String> update_password(HttpSession session, String password){
+//        String id = session.getId();
+//        return iUserService.update_password(id,password);
+//    }
 
-    @RequestMapping("update_password.do")
+    @RequestMapping("update_location.do")
     @ResponseBody
-    public ServerResponse<String> update_password(HttpSession session, String password){
-        String id = session.getId();
-        return iUserService.update_password(id,password);
+    public ServerResponse update_location(HttpSession session, BigDecimal latitute, BigDecimal longitude){
+        User user=(User) session.getAttribute(Const.CURRENT_USER);
+        return iUserService.update_lo(user.getId(),latitute,longitude);
     }
 
 

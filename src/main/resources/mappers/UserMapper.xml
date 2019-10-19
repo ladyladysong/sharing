@@ -1,4 +1,3 @@
-
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sharing.dao.UserMapper">
@@ -18,70 +17,51 @@
     </constructor>
   </resultMap>
   <sql id="Base_Column_List">
-    id, email, username, password, gender, tel, image, rate, create_time, location_latitute, 
+    id, email, username, password, gender, tel, image, rate, create_time, location_latitute,
     location_longitude
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from user_profile
     where id = #{id,jdbcType=INTEGER}
   </select>
-
-  <select id="isUserExist" parameterType="java.lang.String" resultType="com.sharing.pojo.User" >
-    select * from user_profile
-    where email = #{email,jdbcType=VARCHAR}
-  </select>
-
-  <select id="isValidUser" resultType="com.sharing.pojo.User" >
-    select * from user_profile
-    where email = #{email,jdbcType=VARCHAR} and password = #{password,jdbcType=VARCHAR}
-  </select>
-
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from user_profile
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.sharing.pojo.User">
-    insert into user_profile (id, email, username, 
-      password, gender, tel, 
-      image, rate, create_time, 
+    insert into user_profile (id, email, username,
+      password, gender, tel,
+      image, rate, create_time,
       location_latitute, location_longitude)
-    values (#{id,jdbcType=INTEGER}, #{email,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, 
-      #{password,jdbcType=VARCHAR}, #{gender,jdbcType=INTEGER}, #{tel,jdbcType=VARCHAR}, 
-      #{image,jdbcType=VARCHAR}, #{rate,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, 
+    values (#{id,jdbcType=INTEGER}, #{email,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR},
+      #{password,jdbcType=VARCHAR}, #{gender,jdbcType=INTEGER}, #{tel,jdbcType=VARCHAR},
+      #{image,jdbcType=VARCHAR}, #{rate,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP},
       #{locationLatitute,jdbcType=DECIMAL}, #{locationLongitude,jdbcType=DECIMAL})
   </insert>
-  <insert id="addUser" parameterType="com.sharing.pojo.User" useGeneratedKeys="true" keyProperty="id">
-    <selectKey keyProperty="id" resultType="int" order="BEFORE">
-      select if(max(id) is null, 1, max(id) + 2) as newId from user_profile
-    </selectKey>
-    insert into user_profile (id,email,username,password,create_time) values(#{id,jdbcType=INTEGER}, #{email,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR},
-    #{password,jdbcType=VARCHAR}, now());
-  </insert>
-
-  <insert id="insertSelective" parameterType="com.sharing.pojo.User" >
+  <insert id="insertSelective" parameterType="com.sharing.pojo.User">
     insert into user_profile
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
         id,
       </if>
-      <if test="email != null" >
+      <if test="email != null">
         email,
       </if>
-      <if test="username != null" >
+      <if test="username != null">
         username,
       </if>
-      <if test="password != null" >
+      <if test="password != null">
         password,
       </if>
-      <if test="gender != null" >
+      <if test="gender != null">
         gender,
       </if>
-      <if test="tel != null" >
+      <if test="tel != null">
         tel,
       </if>
-      <if test="image != null" >
+      <if test="image != null">
         image,
       </if>
       <if test="rate != null">
@@ -97,26 +77,26 @@
         location_longitude,
       </if>
     </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="email != null" >
+      <if test="email != null">
         #{email,jdbcType=VARCHAR},
       </if>
-      <if test="username != null" >
+      <if test="username != null">
         #{username,jdbcType=VARCHAR},
       </if>
-      <if test="password != null" >
+      <if test="password != null">
         #{password,jdbcType=VARCHAR},
       </if>
       <if test="gender != null">
         #{gender,jdbcType=INTEGER},
       </if>
-      <if test="tel != null" >
+      <if test="tel != null">
         #{tel,jdbcType=VARCHAR},
       </if>
-      <if test="image != null" >
+      <if test="image != null">
         #{image,jdbcType=VARCHAR},
       </if>
       <if test="rate != null">
@@ -133,32 +113,32 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.sharing.pojo.User" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.sharing.pojo.User">
     update user_profile
-    <set >
-      <if test="email != null" >
+    <set>
+      <if test="email != null">
         email = #{email,jdbcType=VARCHAR},
       </if>
-      <if test="username != null" >
+      <if test="username != null">
         username = #{username,jdbcType=VARCHAR},
       </if>
-      <if test="password != null" >
+      <if test="password != null">
         password = #{password,jdbcType=VARCHAR},
       </if>
       <if test="gender != null">
         gender = #{gender,jdbcType=INTEGER},
       </if>
-      <if test="tel != null" >
+      <if test="tel != null">
         tel = #{tel,jdbcType=VARCHAR},
       </if>
-      <if test="image != null" >
+      <if test="image != null">
         image = #{image,jdbcType=VARCHAR},
-      </if>
-      <if test="createTime != null" >
-        create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="rate != null">
         rate = #{rate,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="locationLatitute != null">
         location_latitute = #{locationLatitute,jdbcType=DECIMAL},
@@ -169,7 +149,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.sharing.pojo.User" >
+  <update id="updateByPrimaryKey" parameterType="com.sharing.pojo.User">
     update user_profile
     set email = #{email,jdbcType=VARCHAR},
       username = #{username,jdbcType=VARCHAR},
@@ -183,6 +163,14 @@
       location_longitude = #{locationLongitude,jdbcType=DECIMAL}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <update id="updateLoById" parameterType="com.sharing.pojo.User">
+    update user_profile
+    set location_latitute = #{latitute},
+      location_longitude = #{longitude}
+    where id = #{id}
+  </update>
+
   <select id="selectList" parameterType="map" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List"/>
@@ -205,5 +193,17 @@
     where email=#{email}
     and password=#{password}
   </select>
+
+  <insert id="addNewUser" parameterType="com.sharing.pojo.User" >
+ insert into user_profile (id,email,username,password,create_time,location_latitute,location_longitude) values(#{id,jdbcType=INTEGER}, #{email,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR},
+  #{password,jdbcType=VARCHAR}, now(), #{locationLatitute,jdbcType=DECIMAL}, #{locationLongitude,jdbcType=DECIMAL}) ;
+</insert>
+
+  <select id="isValidUser" resultType="com.sharing.pojo.User" >
+  select * from user_profile
+  where email = #{email,jdbcType=VARCHAR} and password = #{password,jdbcType=VARCHAR}
+</select>
+
+
 
 </mapper>
