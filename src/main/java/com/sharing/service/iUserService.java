@@ -14,8 +14,8 @@ public interface iUserService {
 
     ServerResponse get_user_info(Integer id);
     ServerResponse update_info(Integer id, String info);
-//    ServerResponse update_password(String id, String password);
-
+    ServerResponse update_password(Integer id, String password);
     ServerResponse update_lo(Integer id,BigDecimal latitute, BigDecimal longitude);
+
 
 }

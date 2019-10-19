@@ -24,8 +24,8 @@ public class IUserController {
 
     @RequestMapping("login.do")
     @ResponseBody
-    public ServerResponse<User> login(HttpSession session, String email, String passwd){
-        ServerResponse<User> response=iUserService.login(email,passwd);
+    public ServerResponse<User> login(HttpSession session, String email, String password){
+        ServerResponse<User> response=iUserService.login(email,password);
         if(response.isSuccess()){
             session.setAttribute(Const.CURRENT_USER,response.getData());
         }
@@ -48,25 +48,25 @@ public class IUserController {
 
     @RequestMapping("get_user_info.do")
     @ResponseBody
-    public ServerResponse<User> getUserInfo(HttpSession session){
+    public ServerResponse getUserInfo(HttpSession session){
         User user = (User) session.getAttribute(Const.CURRENT_USER);
         return iUserService.get_user_info(user.getId());
     }
 
     @RequestMapping("update.do")
     @ResponseBody
-    public ServerResponse<String> update_info(HttpSession session,String info){
+    public ServerResponse update_info(HttpSession session,String info){
         User user = (User) session.getAttribute(Const.CURRENT_USER);
         return iUserService.update_info(user.getId(),info);
 
     }
-//
-//    @RequestMapping("update_password.do")
-//    @ResponseBody
-//    public ServerResponse<String> update_password(HttpSession session, String password){
-//        String id = session.getId();
-//        return iUserService.update_password(id,password);
-//    }
+
+    @RequestMapping("update_password.do")
+    @ResponseBody
+    public ServerResponse update_password(HttpSession session, String password){
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        return iUserService.update_password (user.getId(),password);
+    }
 
     @RequestMapping("update_location.do")
     @ResponseBody
@@ -77,7 +77,6 @@ public class IUserController {
 
 
 //   reset_password.do {email}
-//    update_location.do {lo;la}
 
 
 //    public ServerResponse<String> resetPassword(HttpSession session, String email){

@@ -1,9 +1,12 @@
 package com.sharing.service.Impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Maps;
 import com.sharing.common.ServerResponse;
 import com.sharing.dao.UserMapper;
+import com.sharing.dao.UserTagMapper;
 import com.sharing.pojo.User;
+import com.sharing.pojo.UserTag;
 import com.sharing.service.iUserService;
 import com.sharing.util.DateTimeUtil;
 import com.sharing.util.JsonUtil;
@@ -15,27 +18,34 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service("iUserService")
 public class iUserImpl implements iUserService {
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private UserTagMapper userTagMapper;
 
-    public ServerResponse<User> login(String email, String passwd) {
+    public ServerResponse<User> login(String email, String password) {
+        System.out.println("input pd ="+password);
         int count = userMapper.checkEmail(email);
         if (count == 0) {
             return ServerResponse.createByErrorMessage("user not exists");
         }
-        String md5Passwd = MD5Util.MD5EncodeUtf8(passwd);
+        String md5Passwd = MD5Util.MD5EncodeUtf8(password);
         User user = userMapper.selectByEmail(email, md5Passwd);
         if (user == null) {
-            return ServerResponse.createByErrorMessage("wrong password "+md5Passwd);
+            return ServerResponse.createByErrorMessage("wrong password");
         }
         user.setPassword(StringUtils.EMPTY);
         return ServerResponse.createBySuccess(user);
     }
 
+
+    //TODO: add the location(not null) when register
     public ServerResponse register(String email,String password){
         int count = userMapper.checkEmail(email);
         if (count!=0){
@@ -74,17 +84,22 @@ public class iUserImpl implements iUserService {
 
     }
 
-    public ServerResponse<User> get_user_info(Integer id){
+    public ServerResponse get_user_info(Integer id){
         User record = userMapper.selectByPrimaryKey(id);
         if (record==null){
             return ServerResponse.createByErrorMessage("No such user records!");
         }
         record.setPassword(StringUtils.EMPTY);
+
         String CreateTime = DateTimeUtil.dateToStr(record.getCreateTime());
 
-        //TODO: Time format transformation
+        List<Integer> tags=userTagMapper.selectByUserId(id);
 
-        return ServerResponse.createBySuccess("retrieve record successfully, createTime = "+CreateTime,record);
+        Map map = Maps.newHashMap();
+        map.put("User info",record);
+        map.put("User tag",tags);
+        map.put("Create time",CreateTime);
+        return ServerResponse.createBySuccess("retrieve record successfully ",map);
     }
 
 
@@ -104,23 +119,30 @@ public class iUserImpl implements iUserService {
         User update = parseUpdateInfo(user,info);
         int re = userMapper.updateByPrimaryKeySelective(update);
         if (re==0){
-            return ServerResponse.createByErrorMessage("Cannot update information");
+            return ServerResponse.createByErrorMessage("Cannot update normal information");
         }
-        return ServerResponse.createBySuccessMessage("Successfully update");
+        if (!update_tag(user,info)){
+            return ServerResponse.createByErrorMessage("Cannot update user tags");
+        }
+        return ServerResponse.createBySuccessMessage("Successfully update all information");
 
     }
 
-    public ServerResponse update_password(String id, String pwd_){
-        User user = userMapper.selectByPrimaryKey(Integer.parseInt(id));
-        if (user!=null){
-            user.setPassword(pwd_);
-            int re =userMapper.updateByPrimaryKeySelective(user);
-            if (re > 0){
-                return ServerResponse.createBySuccessMessage("successfully update password");
-            }
+    public ServerResponse update_password(Integer id, String pwd_){
+        User user = userMapper.selectByPrimaryKey(id);
+        if (user==null){
+            ServerResponse.createByErrorMessage("No such user");
+        }
+        String md5pwd = MD5Util.MD5EncodeUtf8(pwd_);
+        log.info("original pwd ="+pwd_+" md5: "+md5pwd);
+        user.setPassword(md5pwd);
+        int re = userMapper.updateByPrimaryKeySelective(user);
+        if (re==0){
             return ServerResponse.createByErrorMessage("cannot update password");
         }
-        return ServerResponse.createByErrorMessage("No such user");
+
+        return ServerResponse.createBySuccessMessage("successfully update password");
+
     }
 
 
@@ -138,11 +160,9 @@ public class iUserImpl implements iUserService {
         JSONObject info_list = JSON.parseObject(info);
         String username = info_list.getString("username");
         Integer gender = info_list.getInteger("gender");
-        String tel = info_list.getString("tel");
-        String image = info_list.getString("image");
-        log.info("username="+username);
-        log.info("gender="+gender);
-        log.info("tel="+tel);
+        String phone = info_list.getString("phone");
+        String avatar = info_list.getString("avatar");
+
         if (username!=null){
             user.setUsername(username);
         }
@@ -150,13 +170,32 @@ public class iUserImpl implements iUserService {
             user.setGender(gender);
 
         }
-        if (tel!=null){
-            user.setTel(tel);
+        if (phone!=null){
+            user.setTel(phone);
         }
-        if (image!=null){
-            user.setImage(image);
+        if (avatar!=null){
+            user.setImage(avatar);
         }
         return user;
+    }
+
+
+    private boolean update_tag(User user,String info){
+        boolean status = true;
+        JSONObject info_list = JSON.parseObject(info);
+        String tags = info_list.getString("tag");
+        String[] Tags = tags.split(";");
+        for (String s:Tags) {
+            int t = Integer.parseInt(s);
+            UserTag userTag=new UserTag();
+            userTag.setUserProfileId(user.getId());
+            userTag.setTag(t);
+            int re = userTagMapper.insert(userTag);
+            if (re==0){
+                status=false;
+            }
+        }
+        return status;
     }
 
 
