@@ -78,13 +78,4 @@ public class IUserController {
 
 //   reset_password.do {email}
 
-
-//    public ServerResponse<String> resetPassword(HttpSession session, String email){
-//        ServerResponse<String> response;
-//        //user login -> direct reset
-//
-//        //user not login -> email link
-//        return response;
-//    }
-
 }

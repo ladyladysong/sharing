@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -183,18 +184,33 @@ public class iUserImpl implements iUserService {
     private boolean update_tag(User user,String info){
         boolean status = true;
         JSONObject info_list = JSON.parseObject(info);
-        String tags = info_list.getString("tag");
-        String[] Tags = tags.split(";");
+        String tag = info_list.getString("tag");
+        String[] Tags = tag.split(";");
+        List<String> new_tags = Arrays.asList(Tags);
+        List<Integer> cur_tags = userTagMapper.selectByUserId(user.getId());
         for (String s:Tags) {
             int t = Integer.parseInt(s);
-            UserTag userTag=new UserTag();
-            userTag.setUserProfileId(user.getId());
-            userTag.setTag(t);
-            int re = userTagMapper.insert(userTag);
-            if (re==0){
-                status=false;
+            if (!cur_tags.contains(t)){
+                UserTag userTag=new UserTag();
+                userTag.setUserProfileId(user.getId());
+                userTag.setTag(t);
+                int re = userTagMapper.insert(userTag);
+                if (re==0){
+                    status=false;
+                }
             }
         }
+
+        for (int i = 0; i < cur_tags.size(); i++) {
+            String s = cur_tags.get(i)+"";
+            if (!new_tags.contains(s)){
+                int re = userTagMapper.deleteByPrimaryKey(cur_tags.get(i));
+                if (re==0){
+                    status=false;
+                }
+            }
+        }
+
         return status;
     }
 
