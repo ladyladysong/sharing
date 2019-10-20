@@ -26,4 +26,10 @@ public interface UserMapper {
 
     List<User> selectList(@Param("latituteUp") BigDecimal latituteUp, @Param("latituteBot") BigDecimal latituteBot, @Param("longitudeUp") BigDecimal longitudeUp, @Param("longitudeBot") BigDecimal longitudeBot);
 
+    int addNewUser(User user);
+
+    int updateLoById(@Param("id") Integer id, @Param("latitute") BigDecimal latitute, @Param("longitude") BigDecimal longitude);
+
+
+
 }

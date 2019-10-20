@@ -189,4 +189,20 @@
     and password=#{password}
   </select>
 
+  <insert id="addNewUser" parameterType="com.sharing.pojo.User" >
+    insert into user_profile (id,email,username,password,create_time,location_latitute,location_longitude) values(#{id,jdbcType=INTEGER}, #{email,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR},
+    #{password,jdbcType=VARCHAR}, now(), #{locationLatitute,jdbcType=DECIMAL}, #{locationLongitude,jdbcType=DECIMAL}) ;
+  </insert>
+
+  <update id="updateLoById" parameterType="com.sharing.pojo.User">
+    update user_profile
+    set location_latitute = #{latitute},
+      location_longitude = #{longitude}
+    where id = #{id}
+  </update>
+
+
+
+
+
 </mapper>

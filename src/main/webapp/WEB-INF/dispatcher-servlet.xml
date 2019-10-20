@@ -44,7 +44,7 @@
         <mvc:interceptor>
             <mvc:mapping path="/**"/>
             <mvc:exclude-mapping path="/user/login.do"/>
-<!--            <mvc:exclude-mapping path="/user/register.co"/>-->
+            <mvc:exclude-mapping path="/user/register.do"/>
             <bean class="com.sharing.controller.common.AuthenticationInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
