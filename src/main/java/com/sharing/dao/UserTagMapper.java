@@ -8,6 +8,8 @@ import java.util.List;
 public interface UserTagMapper {
     int deleteByPrimaryKey(Integer id);
 
+    int deleteByUserId(Integer userProfileId);
+
     int insert(UserTag record);
 
     int insertSelective(UserTag record);

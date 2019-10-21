@@ -104,25 +104,34 @@ public class iUserImpl implements iUserService {
     }
 
 
-    public ServerResponse update_info( Integer id, String info){
-
-        //User update = JsonUtil.string2Obj(info,User.class);
+    public ServerResponse update_info( Integer id, User update,String tag){
 
         User user = userMapper.selectByPrimaryKey(id);
-        log.info("original user info : "+JsonUtil.obj2StringPretty(user));
+        //log.info("original user info : "+JsonUtil.obj2StringPretty(user));
+
         if (user==null){
             return ServerResponse.createByErrorMessage("No such user");
         }
-        if (info==null){
-            return ServerResponse.createByErrorMessage("Nothing to update");
+        if (update.getUsername()!=null){
+            user.setUsername(update.getUsername());
+        }
+        if (update.getGender()!=null){
+            user.setGender(update.getGender());
+        }
+        if (update.getTel()!=null){
+            user.setTel(update.getTel());
+        }
+        if (update.getImage()!=null){
+            user.setImage(update.getImage());
         }
 
-        User update = parseUpdateInfo(user,info);
-        int re = userMapper.updateByPrimaryKeySelective(update);
+        //User update = parseUpdateInfo(user,info);
+        int re = userMapper.updateByPrimaryKeySelective(user);
+
         if (re==0){
             return ServerResponse.createByErrorMessage("Cannot update normal information");
         }
-        if (!update_tag(user,info)){
+        if (!update_tag(user,tag)){
             return ServerResponse.createByErrorMessage("Cannot update user tags");
         }
         return ServerResponse.createBySuccessMessage("Successfully update all information");
@@ -181,35 +190,36 @@ public class iUserImpl implements iUserService {
     }
 
 
-    private boolean update_tag(User user,String info){
+    private boolean update_tag(User user,String tag){
         boolean status = true;
-        JSONObject info_list = JSON.parseObject(info);
-        String tag = info_list.getString("tag");
+        if (tag==null){
+            return true;
+        }
+
+        userTagMapper.deleteByUserId(user.getId());
+
         String[] Tags = tag.split(";");
-        List<String> new_tags = Arrays.asList(Tags);
-        List<Integer> cur_tags = userTagMapper.selectByUserId(user.getId());
+//        List<String> new_tags = Arrays.asList(Tags);
         for (String s:Tags) {
             int t = Integer.parseInt(s);
-            if (!cur_tags.contains(t)){
-                UserTag userTag=new UserTag();
-                userTag.setUserProfileId(user.getId());
-                userTag.setTag(t);
-                int re = userTagMapper.insert(userTag);
-                if (re==0){
-                    status=false;
-                }
+            UserTag userTag=new UserTag();
+            userTag.setUserProfileId(user.getId());
+            userTag.setTag(t);
+            int re = userTagMapper.insert(userTag);
+            if (re==0){
+                status=false;
             }
         }
 
-        for (int i = 0; i < cur_tags.size(); i++) {
-            String s = cur_tags.get(i)+"";
-            if (!new_tags.contains(s)){
-                int re = userTagMapper.deleteByPrimaryKey(cur_tags.get(i));
-                if (re==0){
-                    status=false;
-                }
-            }
-        }
+//        for (int i = 0; i < cur_tags.size(); i++) {
+//            String s = cur_tags.get(i)+"";
+//            if (!new_tags.contains(s)){
+//                int re = userTagMapper.deleteByUserId(user.getId());
+//                if (re==0){
+//                    status=false;
+//                }
+//            }
+//        }
 
         return status;
     }

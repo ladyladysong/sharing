@@ -21,6 +21,10 @@
     delete from user_tag
     where id = #{id,jdbcType=INTEGER}
   </delete>
+  <delete id="deleteByUserId" parameterType="java.lang.Integer">
+    delete from user_tag
+    where User_Profile_id = #{userProfileId,jdbcType=INTEGER}
+  </delete>
   <insert id="insert" parameterType="com.sharing.pojo.UserTag">
     insert into user_tag (id, tag, User_Profile_id
       )
