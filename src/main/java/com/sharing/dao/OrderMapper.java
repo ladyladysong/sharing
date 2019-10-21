@@ -19,8 +19,7 @@ public interface OrderMapper {
 
     int updateByPrimaryKey(Order record);
 
-    List<Order> selectList(@Param("latituteUp") BigDecimal latituteUp,@Param("latituteBot") BigDecimal latituteBot, @Param("longitudeUp") BigDecimal longitudeUp, @Param("longitudeBot") BigDecimal longitudeBot, @Param("tags") List<Integer> tags);
+    List<Order> selectList(@Param("latituteUp") BigDecimal latituteUp, @Param("latituteBot") BigDecimal latituteBot, @Param("longitudeUp") BigDecimal longitudeUp, @Param("longitudeBot") BigDecimal longitudeBot, @Param("tags") List<Integer> tags);
 
     Order selectByOrderNo(Long orderNo);
-
 }

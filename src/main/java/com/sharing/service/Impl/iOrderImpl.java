@@ -51,7 +51,7 @@ public class iOrderImpl implements iOrderService {
 
     private long generateOrderNo(){
         long currentTime=System.currentTimeMillis();
-        return currentTime+currentTime%(new Random().nextInt(10));
+        return currentTime+currentTime%(new Random().nextInt(10)+1);
     }
 
     public ServerResponse list(BigDecimal latitute, BigDecimal longitude,Integer uid){
@@ -94,6 +94,7 @@ public class iOrderImpl implements iOrderService {
         orderVo.setAcceptTime(order.getAcceptTime());
         orderVo.setCreateTime(order.getCreateTime());
         orderVo.setReturnTime(order.getReturnTime());
+        orderVo.setAcceptUserId(order.getAcceptUserId());
         String asts=order.getAssets();
         List<String> assets=Lists.newArrayList();
         if(!StringUtils.isBlank(asts)){
@@ -115,6 +116,9 @@ public class iOrderImpl implements iOrderService {
             return ServerResponse.createByErrorMessage("illegal operation, try to get others' order detail");
         }
         OrderVo orderVo=assembleOrderVo(order);
+        if(order.getAcceptUserId().equals(uid)){
+            orderVo.setAcceptUserId(null);
+        }
         return ServerResponse.createBySuccess(orderVo);
     }
 
@@ -123,10 +127,13 @@ public class iOrderImpl implements iOrderService {
         if(order==null){
             return ServerResponse.createByErrorMessage("no such order");
         }
-        if (!order.getUserProfileId().equals(uid)){
-            return ServerResponse.createByErrorMessage("illegal operation, try to alter others' order status");
-        }
+//        if (!order.getUserProfileId().equals(uid)){
+//            return ServerResponse.createByErrorMessage("illegal operation, try to alter others' order status");
+//        }
         order.setStatus(status);
+        if(status.equals(Const.OrderStatusEnum.ACCEPTED.getCode())){
+            order.setAcceptUserId(uid);
+        }
         int result=orderMapper.updateByPrimaryKeySelective(order);
         if (result==0){
             return ServerResponse.createByErrorMessage("update failed");

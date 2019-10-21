@@ -15,11 +15,12 @@
       <arg column="location_longitude" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
       <arg column="User_Profile_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="assets" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="accept_user_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
     </constructor>
   </resultMap>
   <sql id="Base_Column_List">
     id, order_no, status, description, tag, create_time, accept_time, return_time, location_latitute, 
-    location_longitude, User_Profile_id, assets
+    location_longitude, User_Profile_id, assets, accept_user_id
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -35,13 +36,13 @@
     insert into sharing.order (id, order_no, status,
       description, tag, create_time, 
       accept_time, return_time, location_latitute, 
-      location_longitude, User_Profile_id, assets
-      )
+      location_longitude, User_Profile_id, assets, 
+      accept_user_id)
     values (#{id,jdbcType=INTEGER}, #{orderNo,jdbcType=BIGINT}, #{status,jdbcType=INTEGER}, 
-      #{description,jdbcType=VARCHAR}, #{tag,jdbcType=INTEGER}, now(),
+      #{description,jdbcType=VARCHAR}, #{tag,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
       #{acceptTime,jdbcType=TIMESTAMP}, #{returnTime,jdbcType=TIMESTAMP}, #{locationLatitute,jdbcType=DECIMAL}, 
-      #{locationLongitude,jdbcType=DECIMAL}, #{userProfileId,jdbcType=INTEGER}, #{assets,jdbcType=VARCHAR}
-      )
+      #{locationLongitude,jdbcType=DECIMAL}, #{userProfileId,jdbcType=INTEGER}, #{assets,jdbcType=VARCHAR}, 
+      #{acceptUserId,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.sharing.pojo.Order">
     insert into sharing.order
@@ -82,6 +83,9 @@
       <if test="assets != null">
         assets,
       </if>
+      <if test="acceptUserId != null">
+        accept_user_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -100,7 +104,7 @@
         #{tag,jdbcType=INTEGER},
       </if>
       <if test="createTime != null">
-        now(),
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="acceptTime != null">
         #{acceptTime,jdbcType=TIMESTAMP},
@@ -119,6 +123,9 @@
       </if>
       <if test="assets != null">
         #{assets,jdbcType=VARCHAR},
+      </if>
+      <if test="acceptUserId != null">
+        #{acceptUserId,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -158,6 +165,9 @@
       <if test="assets != null">
         assets = #{assets,jdbcType=VARCHAR},
       </if>
+      <if test="acceptUserId != null">
+        accept_user_id = #{acceptUserId,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -173,27 +183,29 @@
       location_latitute = #{locationLatitute,jdbcType=DECIMAL},
       location_longitude = #{locationLongitude,jdbcType=DECIMAL},
       User_Profile_id = #{userProfileId,jdbcType=INTEGER},
-      assets = #{assets,jdbcType=VARCHAR}
+      assets = #{assets,jdbcType=VARCHAR},
+      accept_user_id = #{acceptUserId,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-  <select id="selectList" resultMap="BaseResultMap" parameterType="map">
+
+  <select id="selectList" parameterType="map" resultMap="BaseResultMap">
     select
-    <include refid="Base_Column_List"/>
+    <include refid="Base_Column_List" />
     from sharing.order
     where location_latitute &gt;= #{latituteBot}
     and location_latitute &lt;= #{latituteUp}
     and location_longitude &gt;= #{longitudeBot}
     and location_longitude &lt;= #{longitudeUp}
     and tag in
-    <foreach collection="tags" item="tag" index="index" open="(" separator="," close=")">
+    <foreach close=")" collection="tags" index="index" item="tag" open="(" separator=",">
       #{tag}
     </foreach>
   </select>
 
   <select id="selectByOrderNo" parameterType="long" resultMap="BaseResultMap">
     select
-    <include refid="Base_Column_List"/>
+    <include refid="Base_Column_List" />
     from sharing.order
     where order_no=#{orderNo}
   </select>
