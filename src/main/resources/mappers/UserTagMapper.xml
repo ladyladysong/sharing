@@ -82,7 +82,10 @@
     from user_tag
     where tag=#{tag} and User_Profile_id=#{uid}
   </select>
-
+  <delete id="deleteByUserId" parameterType="java.lang.Integer">
+    delete from user_tag
+    where User_Profile_id = #{userProfileId,jdbcType=INTEGER}
+  </delete>
 
 
 </mapper>

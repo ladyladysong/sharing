@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
@@ -54,11 +55,21 @@ public class IUserController {
 
     @RequestMapping("update.do")
     @ResponseBody
-    public ServerResponse update_info(HttpSession session,String info){
+    public ServerResponse update_info(HttpSession session,@RequestParam(required = false) String username,
+                                      @RequestParam(required = false) Integer gender,
+                                      @RequestParam(required = false) String phone,
+                                      @RequestParam(required = false) String image,
+                                      @RequestParam(required = false) String tag){
         User user = (User) session.getAttribute(Const.CURRENT_USER);
-        return iUserService.update_info(user.getId(),info);
+        User update = new User();
+        update.setUsername(username);
+        update.setTel(phone);
+        update.setGender(gender);
+        update.setImage(image);
+        return iUserService.update_info(user.getId(),update,tag);
 
     }
+
 
     @RequestMapping("update_password.do")
     @ResponseBody
