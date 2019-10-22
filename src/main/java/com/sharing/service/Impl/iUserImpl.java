@@ -36,17 +36,15 @@ public class iUserImpl implements iUserService {
         if (count == 0) {
             return ServerResponse.createByErrorMessage("user not exists");
         }
-        String md5Passwd = MD5Util.MD5EncodeUtf8(password);
-        User user = userMapper.selectByEmail(email, md5Passwd);
-        if (user == null) {
+        String md5Passwd= MD5Util.MD5EncodeUtf8(passwd);
+        User user=userMapper.selectByEmail(email,md5Passwd);
+        if(user==null){
             return ServerResponse.createByErrorMessage("wrong password");
         }
         user.setPassword(StringUtils.EMPTY);
         return ServerResponse.createBySuccess(user);
     }
 
-
-    //TODO: add the location(not null) when register
     public ServerResponse register(String email,String password){
         int count = userMapper.checkEmail(email);
         if (count!=0){
@@ -223,6 +221,5 @@ public class iUserImpl implements iUserService {
 
         return status;
     }
-
 
 }

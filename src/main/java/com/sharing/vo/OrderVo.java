@@ -25,6 +25,16 @@ public class OrderVo {
 
     private Integer userProfileId;
 
+    public Integer getAcceptUserId() {
+        return acceptUserId;
+    }
+
+    public void setAcceptUserId(Integer acceptUserId) {
+        this.acceptUserId = acceptUserId;
+    }
+
+    private Integer acceptUserId;
+
     private List<String> assets;
 
     public Long getOrderNo() {

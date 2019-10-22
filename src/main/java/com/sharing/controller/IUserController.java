@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 
-
 @Slf4j
 @Controller
 @RequestMapping("/user")
@@ -35,15 +34,15 @@ public class IUserController {
 
     @RequestMapping("logout.do")
     @ResponseBody
-    public void logout(HttpSession session){
+    public ServerResponse logout(HttpSession session){
         session.invalidate();
-
+        return ServerResponse.createBySuccess();
     }
 
     @RequestMapping("register.do")
     @ResponseBody
-    public ServerResponse register(HttpSession session, String email, String password, BigDecimal latitute, BigDecimal longitude){
-        return iUserService.register(email,password,latitute,longitude);
+    public ServerResponse register(HttpSession session, String email, String password){
+        return iUserService.register(email,password);
     }
 
 
@@ -85,7 +84,5 @@ public class IUserController {
         return iUserService.update_lo(user.getId(),latitute,longitude);
     }
 
-
-//   reset_password.do {email}
 
 }

@@ -31,6 +31,7 @@ public class IOrderController {
             log.info(user.getId().toString());
             return ServerResponse.createByErrorMessage("invalid operation, try to alter others' order");
         }
+        order.setAcceptUserId(user.getId());
         return iOrderService.createOrder(order);
     }
 
